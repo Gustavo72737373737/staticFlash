@@ -411,7 +411,7 @@ const FLASHCARDS = [
   { word: 'Count me in', translation: 'Pode contar comigo', theme: 'Expressoes Conversacionais' },
   { word: 'Maybe next time', translation: 'Talvez da próxima vez', theme: 'Expressoes Conversacionais' },]
 
-const state = { theme: 'all', search: '', index: 0, flipped: false, known: 0, again: 0, queue: [], queueKey: '' };
+const state = { theme: 'all', search: '', index: 0, flipped: false, known: 0, again: 0, queue: [], queueKey: '', mode: 'study', reviewCards: [] };
 const $ = (selector) => document.querySelector(selector);
 const filteredCards = () => FLASHCARDS.filter((card) => (state.theme === 'all' || card.theme === state.theme) && `${card.word} ${card.translation}`.toLowerCase().includes(state.search.toLowerCase()));
 function shuffled(cards) {
@@ -424,8 +424,8 @@ function shuffled(cards) {
 }
 
 function studyCards(forceShuffle = false) {
-  const cards = filteredCards();
-  const key = `${state.theme}|${state.search}`;
+  const cards = state.mode === 'review' ? state.reviewCards : filteredCards();
+  const key = `${state.mode}|${state.theme}|${state.search}`;
   if (forceShuffle || state.queueKey !== key || state.queue.length !== cards.length) {
     state.queue = shuffled(cards);
     state.queueKey = key;
@@ -457,17 +457,36 @@ function update() {
   document.querySelectorAll('[data-theme]').forEach((button) => button.classList.toggle('active', button.dataset.theme === state.theme));
   $('#knownCount').textContent = String(state.known).padStart(2, '0');
   $('#againCount').textContent = String(state.again).padStart(2, '0');
+  $('#reviewCount').textContent = String(state.reviewCards.length).padStart(2, '0');
   const total = state.known + state.again;
   $('#accuracy').textContent = total ? `${Math.round((state.known / total) * 100)}%` : '--%';
 }
 
-function nextCard(result) { if (result === 'known') state.known += 1; if (result === 'again') state.again += 1; state.index = (state.index + 1) % Math.max(studyCards().length, 1); state.flipped = false; update(); }
+function nextCard(result) {
+  const cards = studyCards();
+  const currentCard = cards[state.index];
+  const reviewing = state.mode === 'review';
+  if (result === 'known') state.known += 1;
+  if (result === 'again') {
+    state.again += 1;
+    if (state.mode === 'study' && currentCard && !state.reviewCards.includes(currentCard)) state.reviewCards.push(currentCard);
+  }
+  if (state.mode === 'review' && result === 'known') {
+    state.reviewCards.splice(state.index, 1);
+    state.queueKey = '';
+  }
+  if (state.mode === 'review' && !state.reviewCards.length) state.mode = 'study';
+  state.index = state.mode === 'review' ? (state.index + 1) % Math.max(state.reviewCards.length, 1) : reviewing ? 0 : (state.index + 1) % Math.max(studyCards().length, 1);
+  state.flipped = false;
+  update();
+}
 $('#flashcard').addEventListener('click', () => { state.flipped = !state.flipped; update(); });
 $('#knownButton').addEventListener('click', () => nextCard('known'));
 $('#againButton').addEventListener('click', () => nextCard('again'));
 $('#searchInput').addEventListener('input', (event) => { state.search = event.target.value; state.index = 0; state.queueKey = ''; state.flipped = false; update(); });
 $('#shuffleButton').addEventListener('click', () => { state.flipped = false; updateWithShuffle(); });
-$('#resetButton').addEventListener('click', () => { state.index = 0; state.flipped = false; state.known = 0; state.again = 0; state.search = ''; state.queueKey = ''; $('#searchInput').value = ''; updateWithShuffle(); });
+$('#reviewButton').addEventListener('click', () => { if (!state.reviewCards.length) return; state.mode = 'review'; state.index = 0; state.queueKey = ''; state.flipped = false; updateWithShuffle(); });
+$('#resetButton').addEventListener('click', () => { state.index = 0; state.flipped = false; state.known = 0; state.again = 0; state.search = ''; state.mode = 'study'; state.reviewCards = []; state.queueKey = ''; $('#searchInput').value = ''; updateWithShuffle(); });
 function updateWithShuffle() { studyCards(true); update(); }
 document.addEventListener('keydown', (event) => { if (event.code === 'Space') { event.preventDefault(); $('#flashcard').click(); } if (event.key === 'ArrowRight') nextCard(); });
 function tick() { $('#clock').textContent = new Date().toLocaleTimeString('pt-BR', { hour12: false }); }
