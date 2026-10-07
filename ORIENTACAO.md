@@ -142,6 +142,66 @@ git diff
 
 7. Crie um commit descrevendo a mudanca.
 
+## Como Alterar O CSS
+
+As regras visuais ficam no arquivo `styles.css`. O arquivo usa variaveis no bloco `:root`, o que permite alterar a identidade visual em um unico lugar:
+
+```css
+:root {
+    --void: #100b1c;
+    --panel: #171024;
+    --purple: #9c5bff;
+    --yellow: #f4d35e;
+    --cyan: #64e4e8;
+    --green: #78e08f;
+    --red: #ff7183;
+    --text: #f3effa;
+}
+```
+
+Para trocar as cores principais, altere os valores dessas variaveis. Por exemplo:
+
+```css
+--yellow: #ffd166;
+--cyan: #06d6a0;
+```
+
+Principais seletores:
+
+- `.topbar`: cabecalho.
+- `.brand`: logo.
+- `.panel`: paineis escuros e bordas.
+- `.flashcard`: cartao principal.
+- `.action-button`: botoes `REVISAR` e `DOMINEI`.
+- `.filter-button`: filtros de tema.
+- `.icon-button`: botoes `RANDOM` e `RESET`.
+- `.study-panel`: area de estudo.
+- `footer`: rodape.
+
+Para alterar o tamanho do cartao, procure por `.flashcard`. Para alterar a fonte, procure pelas propriedades `font-family` ou pelas fontes importadas no inicio do arquivo.
+
+### Responsividade
+
+As regras iniciadas por `@media` controlam telas menores:
+
+```css
+@media (max-width: 760px) {
+    /* ajustes para tablets e celulares */
+}
+
+@media (max-width: 460px) {
+    /* ajustes para celulares pequenos */
+}
+```
+
+Depois de alterar o CSS:
+
+1. Salve o arquivo.
+2. Atualize o `index.html` no navegador.
+3. Teste uma tela grande e uma tela estreita.
+4. Confira se textos, botoes e cards nao ficaram sobrepostos.
+5. Revise a alteracao com `git diff`.
+
 ## Limites Atuais
 
 - Os dados e a logica estao concentrados no `app.js`.
