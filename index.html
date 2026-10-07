@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#100b1c">
+  <title>FLASH//VAULT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Flash Vault início">
+        <span class="brand-mark">[//]</span>
+        <span>FLASH<span class="brand-slash">//</span>VAULT</span>
+      </a>
+      <div class="status-line"><span class="status-dot"></span> ARQUIVO ONLINE <span class="status-divider">|</span> <span id="clock">00:00:00</span></div>
+      <button class="icon-button" id="resetButton" type="button" title="Reiniciar sessão">↻ <span>RESET</span></button>
+    </header>
+
+    <main>
+      <div class="breadcrumb" aria-label="Navegação estrutural"><span>ROOT</span><b>/</b><span>ARCHIVE</span><b>/</b><strong>ENGLISH_CORE</strong></div>
+      <section class="intro-row">
+        <div>
+          <p class="eyebrow">// MÓDULO DE TREINAMENTO LEXICAL</p>
+          <h1>CONHECIMENTO<br><em>CARREGADO.</em></h1>
+        </div>
+        <div class="session-chip"><span>SESSÃO</span><strong id="sessionNumber">001</strong><small>· OFFLINE READY</small></div>
+      </section>
+
+      <section class="workspace-grid">
+        <aside class="sidebar panel">
+          <div class="panel-heading"><span>PASTAS</span><span class="muted">[01]</span></div>
+          <button class="folder active" data-theme="all" type="button"><span class="folder-icon">▾</span><span>ENGLISH_CORE</span><b id="allCount">00</b></button>
+          <div class="subfolders" id="themeList"></div>
+          <div class="sidebar-note"><span class="note-mark">+</span><p>ADICIONE NOVOS<br>REGISTROS NO<br><strong>FLASHCARDS</strong> DO<br>ARQUIVO JS.</p></div>
+        </aside>
+
+        <section class="content-column">
+          <div class="toolbar panel">
+            <div class="toolbar-title"><span class="signal">◆</span><span>INDEX DE CARTÕES</span><strong id="resultCount">00</strong></div>
+            <label class="search-box"><span>/</span><input id="searchInput" type="search" placeholder="BUSCAR TERMO..." autocomplete="off"><kbd>⌕</kbd></label>
+          </div>
+
+          <div class="filter-row" id="filterRow" aria-label="Filtros de tema"></div>
+
+          <article class="study-panel panel">
+            <div class="study-top"><span id="cardTag">SUBSTANTIVOS</span><span id="cardPosition">01 / 10</span></div>
+            <button class="flashcard" id="flashcard" type="button" aria-label="Virar cartão">
+              <span class="card-corner corner-tl">┌</span><span class="card-corner corner-br">┘</span>
+              <span class="card-face-label" id="faceLabel">FRENTE // INGLÊS</span>
+              <strong id="cardWord">TIME</strong>
+              <span class="card-hint" id="cardHint">CLIQUE PARA REVELAR A TRADUÇÃO <b>↗</b></span>
+            </button>
+            <div class="study-actions">
+              <button class="action-button action-again" id="againButton" type="button"><span>↺</span> REVISAR</button>
+              <button class="action-button action-known" id="knownButton" type="button">DOMINEI <span>✓</span></button>
+            </div>
+            <div class="progress-track"><span id="progressBar"></span></div>
+          </article>
+
+          <div class="lower-grid">
+            <section class="panel queue-panel"><div class="panel-heading"><span>FILA DE UPLOAD</span><span class="muted">STATIC</span></div><div class="queue-row"><span class="file-icon">▣</span><span><strong>english_core.readme</strong><small>FONTE LOCAL · SINCRONIZADO</small></span><b class="success-text">OK</b></div><div class="queue-row"><span class="file-icon">▣</span><span><strong>progress.session</strong><small>ESTADO DA SESSÃO ATUAL</small></span><b class="cyan-text">LIVE</b></div></section>
+            <section class="panel stats-panel"><div class="panel-heading"><span>TELEMETRIA</span><span class="muted">LOCAL</span></div><div class="stat-line"><span>DOMINADOS</span><strong class="success-text" id="knownCount">00</strong></div><div class="stat-line"><span>REVISAR</span><strong class="warning-text" id="againCount">00</strong></div><div class="stat-line"><span>PRECISÃO</span><strong id="accuracy">--%</strong></div></section>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer><span>FLASH//VAULT v1.0.0</span><span>SEM SERVIDOR · SEM LOGIN · SEU ARQUIVO, SUAS REGRAS</span><span>[ <b>SPACE</b> VIRAR ]</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
